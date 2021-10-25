@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="./static/login.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script defer src="./static/auth.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -17,11 +18,12 @@
         </ul>
     </nav>
     <h1>Log In!</h1>  
-    <form action="" id='registration'>
-        <label for="username">Insert a username</label>
-        <input type="text" name='username' id='username' placeholder='Username'>
+    <form action="" id='logIn'>
+        <label for="email">Insert an email</label>
+        <input type="text" name='email' id='email' placeholder='email'>
         <label for="password">Insert a password</label>
         <input type="password" name='password' id='password' placeholder='Password'> 
+        <button type="submit" id='logInButton'>Log in</button>
     </form>
 </body>
 </html>
