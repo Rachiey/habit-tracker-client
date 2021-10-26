@@ -1,8 +1,15 @@
 const regForm = document.getElementById('registration')
 const LogIn = document.getElementById('logIn')
 
-// regForm.addEventListener('submit', requestRegistration)
-LogIn.addEventListener('submit', requestLogin)
+
+regForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    requestRegistration(e)
+})
+LogIn.addEventListener('submit', (e) => { 
+    e.preventDefault();
+    requestLogin(e)
+})
 
 
 async function requestLogin(e){

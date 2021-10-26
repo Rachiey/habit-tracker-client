@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src="./static/auth.js"></script>
+    <script defer src='https://cdn.jsdelivr.net/npm/jwt-decode@1.5.1/build/jwt-decode.min.js'></script>
     <title>Document</title>
 </head>
 <body>
@@ -20,7 +21,7 @@
     <h1>Sign Up!</h1>
     <form action="" id='registration'>
         <label for="username">Insert a username</label>
-        <input type="text" name='username' id='username' placeholder='Username'>
+        <input type="text" name='name' id='name' placeholder='Username'>
         <label for='email'>Insert an email address</label>
         <input type="email" name="email" id="email" placeholder="user@provider.com">
         <label for="password">Insert a password</label>
