@@ -209,6 +209,7 @@ async function changePass(){
         { tag: 'input', attributes: { type: 'password', name: 'currentPassword', id:"currentPassword", placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'password', name: 'newPassword', id:"newPassword", placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'password', name: 'verifyNewPassword', id:"verifyNewPassword", placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'hidden', name: 'userid', id:"userid" } },
         { tag: 'input', attributes: { type: 'submit', value: 'Change Password' } }
     ]
     const form = document.createElement('form');
@@ -225,12 +226,16 @@ async function changePass(){
         if(e.target.newPassword.value === e.target.verifyNewPassword.value){
             e.preventDefault()
             try{
+                let token = localStorage.getItem('token')
+                const user = jwt_decode(token);
+                let userId = user.userId;
+                e.target.userid.value = userId;
                 const options = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json','Authorization': localStorage.getItem('token')},
                     body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
                 }
-                const response = await fetch(`http://localhost:3000/user/changePassword`, options)
+                const response = await fetch(`http://localhost:3000/users/changePassword`, options)
                 const data = await response.json()
                 if (!data.success) { throw new Error('Could not change Password'); }
                 window.location.reload();
