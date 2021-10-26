@@ -12,7 +12,7 @@ h1 {
     justify-content: center;
 }
 
-/* .progress {
+.progress {
     width: 150px;
     height: 150px !important;
     float: left;
@@ -22,7 +22,7 @@ h1 {
     box-shadow: none;
     position:relative;
     
-} */
+}
 
 .progress:after {
     content: "";
