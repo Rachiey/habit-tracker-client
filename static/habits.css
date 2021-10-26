@@ -16,3 +16,18 @@ body {
         conic-gradient(rgb(7, 83, 170) var(--percentage,0), transparent var(--percentage,0)) border-box; 
     --percentage: 0deg;
 }
+
+.circular-progress-water {
+    display: flex;
+    width: 150px;
+    height: 150px;
+    border:20px solid transparent;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+     background:
+        linear-gradient(#fff, #fff) content-box no-repeat,
+        conic-gradient(rgb(7, 83, 170) var(--percentage,0), transparent var(--percentage,0)) border-box; 
+    --percentage: 0deg;
+}
