@@ -41,7 +41,9 @@ function registerForm(){
 }
 
 async function getHabits(){
-    let userId = localStorage.getItem('userid')
+    let token = localStorage.getItem('token')
+    const user = jwt_decode(token);
+    let userId = user.userId
     const options = {
         headers: new Headers({'Authorization': localStorage.getItem('token')}),
     }
@@ -59,9 +61,9 @@ function renderHabit(data){
     let habitParent = document.createElement("div");
     let habitName = document.createElement("p");
     habitName.innerText = data.name;
-    let habitFrequency = document.createElement("p");
-    habitFrequency.innerText= data.frequency;
-    habitParent.append(habitName,habitFrequency);
+    let habitQuantity = document.createElement("p");
+    habitQuantity.innerText= data.quantity;
+    habitParent.append(habitName,habitQuantity);
     habitHolder.append(habitParent)
 }
 
@@ -89,6 +91,13 @@ function getToken(){
         buttonParent.appendChild(signInButton);
         buttonParent.appendChild(registerButton);
     } else {
+        let logoutButton = document.createElement("button");
+        logoutButton.innerText = "Log Out";
+        let buttonParent = document.querySelector("#auth")
+        buttonParent.appendChild(logoutButton);
+        logoutButton.addEventListener('click', (e) =>{
+            e.preventDefault()
+            logout()});
         getHabits();
     }
 }
