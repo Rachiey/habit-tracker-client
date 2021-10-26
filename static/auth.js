@@ -1,15 +1,3 @@
-const regForm = document.getElementById('registration')
-const LogIn = document.getElementById('logIn')
-
-
-regForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    requestRegistration(e)
-})
-LogIn.addEventListener('submit', (e) => { 
-    e.preventDefault();
-    requestLogin(e)
-})
 
 
 async function requestLogin(e){
@@ -49,14 +37,17 @@ async function requestRegistration(e) {
 function login(token){
     const user = jwt_decode(token);
     localStorage.setItem("token", token);
-    localStorage.setItem("username", user.username);
+    localStorage.setItem("username", user.name);
     localStorage.setItem("userEmail", user.email);
-    document.querySelector('body').style.backgroundColor = 'green';
+    localStorage.setItem("userid", user.userId);
+    window.location.reload();
+    getToken();
 }
 
 function logout(){
     localStorage.clear();
-    window.location.hash = '#login';
+    window.location.reload();
+    getToken();
 }
 
 function currentUser(){
