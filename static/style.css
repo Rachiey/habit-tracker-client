@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400&display=swap');
 
 body {
     background-color: #519E8A;
@@ -93,7 +94,17 @@ input[type="submit"]{
     justify-content: center;
     font-size: 1.5em;
      background:
-        linear-gradient(#fff, #fff) content-box no-repeat,
+        linear-gradient( #519E8A, #519E8A) content-box no-repeat,
         conic-gradient(rgb(7, 83, 170) var(--percentage,0), transparent var(--percentage,0)) border-box; 
     --percentage: 0deg;
+    margin: 5px;
+}
+
+p {
+    color: black;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'Signika Negative', sans-serif;
+    margin-top: 15px;
+   
 }
