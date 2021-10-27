@@ -8,8 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src='https://cdn.jsdelivr.net/npm/jwt-decode@1.5.1/build/jwt-decode.min.js'></script>
     <link rel="stylesheet" href="./static/habits.css">
+    <script defer src="./static/habits.js"></script>
+
     <title>Document</title>
 </head>
+
 <body>
     <nav>
         <ul>
@@ -20,5 +23,18 @@
         </ul>
     </nav>   
     <h1>Your Habits</h1> 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="circular-progress-1"></div>
+
+    <br />
+    
+    Progress value: <input type="number" min="0" max="100" value="0">
+</div>
+</div>
+</div>
+
+  
 </body>
 </html>
