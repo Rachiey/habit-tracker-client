@@ -8,8 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src='https://cdn.jsdelivr.net/npm/jwt-decode@1.5.1/build/jwt-decode.min.js'></script>
     <link rel="stylesheet" href="./static/habits.css">
+    <script defer src="./static/habits.js"></script>
+
     <title>Document</title>
 </head>
+
 <body>
     <nav>
         <ul>
@@ -23,78 +26,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-6">
-                <div class="progress blue">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">90%</div>
-                </div>
-            </div>
+                <div class="circular-progress-1"></div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="progress yellow">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">75%</div>
-                </div>
-            </div>
-            <div class="w-100"></div>
-            <div class="col-md-3 col-sm-6">
-                <div class="progress pink">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">60%</div>
-                </div>
-            </div>
+    <br />
+    
+    Progress value: <input type="number" min="0" max="100" value="0">
+</div>
+</div>
+</div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="progress green">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">25%</div>
-                </div>
-            </div>
-            <div class="w-100"></div>
-            <div class="col-md-3 col-sm-6">
-                <div class="progress purple">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">10%</div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-                <div class="progress black">
-                    <span class="progress-left">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <span class="progress-right">
-                        <span class="progress-bar"></span>
-                    </span>
-                    <div class="progress-value">+</div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 </body>
 </html>
