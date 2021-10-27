@@ -68,7 +68,7 @@ async function getHabits(){
     const options = {
         headers: new Headers({'Authorization': localStorage.getItem('token')}),
     }
-    response = await fetch(`http://localhost:3000/habits/${userId}`,options)
+    response = await fetch(`http://localhost:3000/habits/user/${userId}`,options)
     habits = await response.json()
     if (habits.err) {
         logout()
@@ -88,24 +88,45 @@ function renderHabit(data){
     habitBootstrap.setAttribute("class","col-md-3 col-sm-6");
     let circularProgress = document.createElement('div');
     circularProgress.setAttribute("class","circular-progress-1")
-    circularProgress.style.setProperty('--percentage', `${data.quantity * (360/data.target)}deg`)
+    const created_date = new Date();
+    const date = `${created_date.getDate()}/${created_date.getMonth()}/${created_date.getFullYear()}`
+    let completedAmount = data.history[date]
+    circularProgress.style.setProperty('--percentage', `${completedAmount * (360/data.quantity)}deg`)
     
-    habitName.innerText = data.name;
+    habitName.innerText = data.habitName;
     let habitQuantity = document.createElement("p");
     habitQuantity.innerText= data.quantity;
     habitId = data._id;  
     circularProgress.addEventListener("click", (e) => {
         e.preventDefault()
         console.log(habitId);
+        incrementHabit(habitID)
     })
     circularProgress.append(habitName);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
     habitHolder.append(habitParent)
+    let habitID= data._id;
+    
 }
 
-
+async function incrementHabit(habitID){
+    console.log(1);
+    const options = {
+        method: 'PATCH',
+    }
+    console.log(2);
+    response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
+    console.log(3);
+    habits = await response.json()
+    if (habits.err) {
+       
+    }
+    habitHolder = document.querySelector("#habits")
+    areaReload(habitHolder);
+    getHabits()
+}
 
 function loadUserArea(){
     buttonParent = document.querySelector("#auth");
@@ -201,10 +222,7 @@ function getToken(){
     }
 }
 
-function incrementHabit(){
 
-
-}
 
 function areaReload(section){
     while(section.firstChild) {
