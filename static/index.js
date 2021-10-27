@@ -174,6 +174,53 @@ function loadUserArea(){
 
 
 
+
+function loadUserArea(){
+    buttonParent = document.querySelector("#auth");
+    buttonParent.style.display = "none";
+    habitParent = document.querySelector("#habits");
+    habitParent.style.display = "none";
+    userArea = document.createElement("div");
+    userArea.setAttribute("id","userArea")
+    userName = document.createElement("p");
+    userName.setAttribute("id", "userName");
+    userName.innerText = localStorage.getItem("username");
+    userEmail = document.createElement("p");
+    userEmail.setAttribute("id", "userEmail");
+    userEmail.innerText = localStorage.getItem("userEmail");
+    changePassword = document.createElement("button");
+    changePassword.setAttribute("id", "changePassword");
+    changePassword.innerText = "Change Password"
+    changePassword.addEventListener("click", (e) => {
+        e.preventDefault()
+        changePass()
+    })
+    logoutButton = document.createElement("button");
+    logoutButton.setAttribute("id", "logoutButton");
+    logoutButton.innerText ="Log Out"
+    logoutButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        logout()
+    })
+    backButton = document.createElement("button");
+    backButton.setAttribute("class", "backButton");
+    backButton.innerText = "Back";
+    backButton.addEventListener("click", (e) =>{
+        e.preventDefault()
+        section = document.querySelector("#userArea");
+        areaReload(section);
+        buttonParent.style.display = "block";
+        habitParent.style.display = "block";
+
+    })
+    userArea.append(userName, userEmail, changePassword, logoutButton, backButton);
+    userAreaParent =document.querySelector("#user");
+    userAreaParent.appendChild(userArea);
+
+}
+
+
+
 function getToken(){
     token = localStorage.getItem("token");
     if(!token){
