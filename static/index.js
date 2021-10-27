@@ -3,8 +3,8 @@
 
 function loginForm(){
     const fields = [
-        { tag: 'input', attributes: { type: 'email', name: 'email', placeholder: 'Email' } },
-        { tag: 'input', attributes: { type: 'password', name: 'password', placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'email', name: 'email', id:"email", placeholder: 'Email' } },
+        { tag: 'input', attributes: { type: 'password', name: 'password', id:"password", placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'submit', value: 'Login' } }
     ]
     const form = document.createElement('form');
@@ -22,9 +22,9 @@ function loginForm(){
 
 function registerForm(){
     const fields = [
-        { tag: 'input', attributes: { type: 'text', name: 'username', placeholder: 'Username' } },
-        { tag: 'input', attributes: { type: 'email', name: 'email', placeholder: 'Email' } },
-        { tag: 'input', attributes: { type: 'password', name: 'password', placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'text', name: 'name', id: 'name', placeholder: 'Username' } },
+        { tag: 'input', attributes: { type: 'email', name: 'email', id: 'email', placeholder: 'Email' } },
+        { tag: 'input', attributes: { type: 'password', name: 'password', id: "password", placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'submit', value: 'Create Account' } }
     ]
     const form = document.createElement('form');
@@ -42,9 +42,10 @@ function registerForm(){
 
 function newHabitForm(){
     const fields = [
-        { tag: 'input', attributes: { type: 'text', name: 'username', placeholder: 'Username' } },
-        { tag: 'input', attributes: { type: 'email', name: 'email', placeholder: 'Email' } },
-        { tag: 'input', attributes: { type: 'password', name: 'password', placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'hidden', name: 'userID', id: 'userID', placeholder: 'Habit Name' } },
+        { tag: 'input', attributes: { type: 'text', name: 'habitName', id: "habitName", placeholder: 'Habit Name' } },
+        { tag: 'input', attributes: { type: 'text', name: 'goodhabit', id: "goodhabit", placeholder: 'Email' } },
+        { tag: 'input', attributes: { type: 'password', name: 'password', id: "password",placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'submit', value: 'Create Account' } }
     ]
     const form = document.createElement('form');
@@ -67,7 +68,7 @@ async function getHabits(){
     const options = {
         headers: new Headers({'Authorization': localStorage.getItem('token')}),
     }
-    response = await fetch(`http://localhost:3000/habits/${userId}`,options)
+    response = await fetch(`http://localhost:3000/habits/user/${userId}`,options)
     habits = await response.json()
     if (habits.err) {
         logout()
@@ -87,22 +88,90 @@ function renderHabit(data){
     habitBootstrap.setAttribute("class","col-md-3 col-sm-6");
     let circularProgress = document.createElement('div');
     circularProgress.setAttribute("class","circular-progress-1")
-    circularProgress.style.setProperty('--percentage', `${data.quantity * (360/data.target)}deg`)
+    const created_date = new Date();
+    const date = `${created_date.getDate()}/${created_date.getMonth()}/${created_date.getFullYear()}`
+    let completedAmount = data.history[date]
+    circularProgress.style.setProperty('--percentage', `${completedAmount * (360/data.quantity)}deg`)
     
-    habitName.innerText = data.name;
+    habitName.innerText = data.habitName;
     let habitQuantity = document.createElement("p");
     habitQuantity.innerText= data.quantity;
     habitId = data._id;  
     circularProgress.addEventListener("click", (e) => {
         e.preventDefault()
         console.log(habitId);
+        incrementHabit(habitID)
     })
     circularProgress.append(habitName);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
     habitHolder.append(habitParent)
+    let habitID= data._id;
+    
 }
+
+async function incrementHabit(habitID){
+    console.log(1);
+    const options = {
+        method: 'PATCH',
+    }
+    console.log(2);
+    response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
+    console.log(3);
+    habits = await response.json()
+    if (habits.err) {
+       
+    }
+    habitHolder = document.querySelector("#habits")
+    areaReload(habitHolder);
+    getHabits()
+}
+
+function loadUserArea(){
+    buttonParent = document.querySelector("#auth");
+    buttonParent.style.display = "none";
+    habitParent = document.querySelector("#habits");
+    habitParent.style.display = "none";
+    userArea = document.createElement("div");
+    userArea.setAttribute("id","userArea")
+    userName = document.createElement("p");
+    userName.setAttribute("id", "userName");
+    userName.innerText = localStorage.getItem("username");
+    userEmail = document.createElement("p");
+    userEmail.setAttribute("id", "userEmail");
+    userEmail.innerText = localStorage.getItem("userEmail");
+    changePassword = document.createElement("button");
+    changePassword.setAttribute("id", "changePassword");
+    changePassword.innerText = "Change Password"
+    changePassword.addEventListener("click", (e) => {
+        e.preventDefault()
+        changePass()
+    })
+    logoutButton = document.createElement("button");
+    logoutButton.setAttribute("id", "logoutButton");
+    logoutButton.innerText ="Log Out"
+    logoutButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        logout()
+    })
+    backButton = document.createElement("button");
+    backButton.setAttribute("class", "backButton");
+    backButton.innerText = "Back";
+    backButton.addEventListener("click", (e) =>{
+        e.preventDefault()
+        section = document.querySelector("#userArea");
+        areaReload(section);
+        buttonParent.style.display = "block";
+        habitParent.style.display = "block";
+
+    })
+    userArea.append(userName, userEmail, changePassword, logoutButton, backButton);
+    userAreaParent =document.querySelector("#user");
+    userAreaParent.appendChild(userArea);
+
+}
+
 
 
 function getToken(){
@@ -114,23 +183,23 @@ function getToken(){
         registerButton = document.createElement("button");
         registerButton.setAttribute("id", "registerButton");
         registerButton.innerText = "Register";
-        BackButton = document.createElement("button");
-        BackButton.setAttribute("id", "BackButton");
-        BackButton.innerText = "Back";
-        BackButton.style.display = "none";
+        backButton = document.createElement("button");
+        backButton.setAttribute("id", "backButton");
+        backButton.innerText = "Back";
+        backButton.style.display = "none";
         signInButton.addEventListener("click", (e) => {
             e.preventDefault()
             signInButton.style.display = "none";
             registerButton.style.display = "none";
-            BackButton.style.display = "block";
+            backButton.style.display = "block";
             loginForm(e)});
         registerButton.addEventListener("click", (e) => {
             e.preventDefault()
             signInButton.style.display = "none";
             registerButton.style.display = "none";
-            BackButton.style.display = "block"
+            backButton.style.display = "block"
             registerForm(e)});
-        BackButton.addEventListener("click", (e) =>{
+        backButton.addEventListener("click", (e) =>{
             e.preventDefault()
             window.location.reload();
         })
@@ -138,22 +207,83 @@ function getToken(){
         buttonParent = document.querySelector("#auth");
         buttonParent.appendChild(signInButton);
         buttonParent.appendChild(registerButton);
-        buttonParent.appendChild(BackButton);
+        buttonParent.appendChild(backButton);
 
     } else {
-        let logoutButton = document.createElement("button");
-        logoutButton.innerText = "Log Out";
+        document.querySelector("#welcome").style.display = "none";
+        let userButton = document.createElement("button");
+        userButton.innerText = localStorage.getItem("username");
         let buttonParent = document.querySelector("#auth")
-        buttonParent.appendChild(logoutButton);
-        logoutButton.addEventListener('click', (e) =>{
+        buttonParent.appendChild(userButton);
+        userButton.addEventListener('click', (e) =>{
             e.preventDefault()
-            logout()});
+            loadUserArea()});
         getHabits();
     }
 }
 
-function incrementHabit(){
 
 
+function areaReload(section){
+    while(section.firstChild) {
+        section.firstChild.remove()
+    }
 }
+
+
+async function changePass(){
+    section = document.querySelector("#userArea")
+    areaReload(section);
+    backButton = document.createElement("button");
+    backButton.innerText = "Back";
+    backButton.setAttribute("class", "back");
+    backButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        section = document.querySelector("#userArea")
+        areaReload(section);
+        loadUserArea();
+    })
+    section.append(backButton);
+    const fields = [
+        { tag: 'input', attributes: { type: 'password', name: 'currentPassword', id:"currentPassword", placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'password', name: 'newPassword', id:"newPassword", placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'password', name: 'verifyNewPassword', id:"verifyNewPassword", placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'hidden', name: 'userid', id:"userid" } },
+        { tag: 'input', attributes: { type: 'submit', value: 'Change Password' } }
+    ]
+    const form = document.createElement('form');
+    fields.forEach(f => {
+        let field = document.createElement(f.tag);
+        Object.entries(f.attributes).forEach(([a,v]) => {
+            field.setAttribute(a,v)
+            form.appendChild(field)
+        })
+    })
+    
+    section.appendChild(form)
+    form.addEventListener('submit', async(e)=>{
+        if(e.target.newPassword.value === e.target.verifyNewPassword.value){
+            e.preventDefault()
+            try{
+                let token = localStorage.getItem('token')
+                const user = jwt_decode(token);
+                let userId = user.userId;
+                e.target.userid.value = userId;
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json','Authorization': localStorage.getItem('token')},
+                    body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+                }
+                const response = await fetch(`http://localhost:3000/users/changePassword`, options)
+                const data = await response.json()
+                if (!data.success) { throw new Error('Could not change Password'); }
+                window.location.reload();
+            } catch (err) {
+                console.warn(err);
+            }
+        }
+    })
+}
+
+
 getToken();
