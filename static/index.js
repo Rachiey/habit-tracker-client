@@ -134,7 +134,18 @@ function loadUserArea(){
         e.preventDefault()
         logout()
     })
-    userArea.append(userName, userEmail, changePassword, logoutButton);
+    backButton = document.createElement("button");
+    backButton.setAttribute("class", "backButton");
+    backButton.innerText = "Back";
+    backButton.addEventListener("click", (e) =>{
+        e.preventDefault()
+        section = document.querySelector("#userArea");
+        areaReload(section);
+        buttonParent.style.display = "block";
+        habitParent.style.display = "block";
+
+    })
+    userArea.append(userName, userEmail, changePassword, logoutButton, backButton);
     userAreaParent =document.querySelector("#user");
     userAreaParent.appendChild(userArea);
 
@@ -205,6 +216,16 @@ function areaReload(section){
 async function changePass(){
     section = document.querySelector("#userArea")
     areaReload(section);
+    backButton = document.createElement("button");
+    backButton.innerText = "Back";
+    backButton.setAttribute("class", "back");
+    backButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        section = document.querySelector("#userArea")
+        areaReload(section);
+        loadUserArea();
+    })
+    section.append(backButton);
     const fields = [
         { tag: 'input', attributes: { type: 'password', name: 'currentPassword', id:"currentPassword", placeholder: 'Password' } },
         { tag: 'input', attributes: { type: 'password', name: 'newPassword', id:"newPassword", placeholder: 'Password' } },
