@@ -8,6 +8,7 @@ function loginForm(){
         { tag: 'input', attributes: { type: 'submit', value: 'Login' } }
     ]
     const form = document.createElement('form');
+    form.setAttribute('id','loginForm')
     fields.forEach(f => {
         let field = document.createElement(f.tag);
         Object.entries(f.attributes).forEach(([a,v]) => {
@@ -17,6 +18,7 @@ function loginForm(){
     })
     signUpParent=document.querySelector("#auth")
     signUpParent.appendChild(form)
+    form.style.marginTop = "20px"
     form.addEventListener('submit', requestLogin)
 }
 
@@ -28,6 +30,7 @@ function registerForm(){
         { tag: 'input', attributes: { type: 'submit', value: 'Create Account' } }
     ]
     const form = document.createElement('form');
+    form.setAttribute("id","registerForm")
     fields.forEach(f => {
         let field = document.createElement(f.tag);
         Object.entries(f.attributes).forEach(([a,v]) => {
@@ -36,19 +39,26 @@ function registerForm(){
         })
     })
     signUpParent=document.querySelector("#auth")
-    signUpParent.appendChild(form)
+    signUpParent.prepend(form)
+    form.style.order = 1;
+    form.style.marginTop = "20px";
     form.addEventListener('submit', requestRegistration)
 }
 
 function newHabitForm(){
+    
+
     const fields = [
         { tag: 'input', attributes: { type: 'hidden', name: 'userID', id: 'userID', placeholder: 'Habit Name' } },
         { tag: 'input', attributes: { type: 'text', name: 'habitName', id: "habitName", placeholder: 'Habit Name' } },
-        { tag: 'input', attributes: { type: 'text', name: 'goodhabit', id: "goodhabit", placeholder: 'Email' } },
-        { tag: 'input', attributes: { type: 'password', name: 'password', id: "password",placeholder: 'Password' } },
-        { tag: 'input', attributes: { type: 'submit', value: 'Create Account' } }
+        { tag: 'input', attributes: { type: 'text', name: 'quantity', id:"quantity", placeholder: 'Quantity'}},
+        { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units'}},
+        { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units'}},
+        { tag: 'input', attributes: { type: 'submit', id:"create", value: 'Create Habit' } }
+        
     ]
     const form = document.createElement('form');
+    form.setAttribute("id", "newHabitForm")
     fields.forEach(f => {
         let field = document.createElement(f.tag);
         Object.entries(f.attributes).forEach(([a,v]) => {
@@ -56,9 +66,22 @@ function newHabitForm(){
             form.appendChild(field)
         })
     })
-    signUpParent=document.querySelector("#auth")
-    signUpParent.appendChild(form)
-    form.addEventListener('submit', requestRegistration)
+    createButton = document.querySelector("#create")
+
+    newHabitFormParent=document.querySelector("#newHabitFormParent")
+    let backButton = document.createElement("button");
+    backButton.setAttribute("id", "backToHabits");
+    backButton.setAttribute("class","backButton");
+    backButton.textContent = "Back";
+    backButton.addEventListener("click", (e) =>{
+        e.preventDefault()
+        areaReload(newHabitFormParent);
+        let habitParent = document.querySelector("#habits")
+        habitParent.style.display = "block";
+    })
+    
+    newHabitFormParent.append(backButton, form)
+    form.addEventListener('submit', addNewHabit)
 }
 
 async function getHabits(){
@@ -74,6 +97,18 @@ async function getHabits(){
         logout()
     }
     await habits.map(r => renderHabit(r))
+    if (habits.length < 6){
+        let newHabitButton = document.createElement('button')
+        newHabitButton.textContent  = "Add New Habit"
+        newHabitButton.setAttribute("id","newHabitButton")
+        let habitParent = document.querySelector("#habits")
+        newHabitButton.addEventListener("click", (e) => {
+            e.preventDefault()
+            habitParent.style.display = "none";
+            newHabitForm()
+        })
+        habitParent.append(newHabitButton)
+    }
     console.log(habits);
 }
 
@@ -87,45 +122,75 @@ function renderHabit(data){
     let habitBootstrap = document.createElement("div")
     habitBootstrap.setAttribute("class","col-md-3 col-sm-6");
     let circularProgress = document.createElement('div');
-    circularProgress.setAttribute("class","circular-progress-1")
+    circularProgress.setAttribute("class","circular-progress-1");
+    habitId = data._id;  
+    circularProgress.setAttribute("id",habitId);
     const created_date = new Date();
     const date = `${created_date.getDate()}/${created_date.getMonth()}/${created_date.getFullYear()}`
     let completedAmount = data.history[date]
-    circularProgress.style.setProperty('--percentage', `${completedAmount * (360/data.quantity)}deg`)
+    let circlePercentage = completedAmount *(360/data.quantity)
+    circularProgress.style.setProperty('--percentage', `${completedAmount *(360/data.quantity)}deg`)
     
     habitName.innerText = data.habitName;
     let habitQuantity = document.createElement("p");
     habitQuantity.innerText= data.quantity;
-    habitId = data._id;  
     circularProgress.addEventListener("click", (e) => {
+        console.log(circularProgress.id);
+        let habitid = circularProgress.id;
         e.preventDefault()
-        console.log(habitId);
-        incrementHabit(habitID)
+        if (circlePercentage < 360){
+            incrementHabit(habitid)
+        } else {
+            habitName.innerText = "Habit completed for today"
+            setTimeout(2000, () => { habitName.innerText=data.habitName})
+        }
     })
     circularProgress.append(habitName);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
     habitHolder.append(habitParent)
-    let habitID= data._id;
+
     
 }
 
+async function addNewHabit(e){
+    e.preventDefault()
+    try {
+        let token = localStorage.getItem('token')
+        let user = jwt_decode(token);
+        let userID = user.userId;
+        e.target.userID.value = userID;
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+        }
+        const r = await fetch(`http://localhost:3000/habits/`, options)
+        let section = document.querySelector("#habits")
+        areaReload(section);
+        let form = document.querySelector("#newHabitFormParent")
+        areaReload(form);
+
+        section.style.display = "block";
+        getToken();
+    }catch(err){
+
+    }
+}
+
 async function incrementHabit(habitID){
-    console.log(1);
     const options = {
         method: 'PATCH',
     }
-    console.log(2);
     response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
-    console.log(3);
     habits = await response.json()
     if (habits.err) {
        
     }
     habitHolder = document.querySelector("#habits")
     areaReload(habitHolder);
-    getHabits()
+    getToken();
 }
 
 function loadUserArea(){
@@ -158,16 +223,16 @@ function loadUserArea(){
     backButton = document.createElement("button");
     backButton.setAttribute("class", "backButton");
     backButton.innerText = "Back";
+    userAreaParent =document.querySelector("#user");
     backButton.addEventListener("click", (e) =>{
         e.preventDefault()
-        section = document.querySelector("#userArea");
-        areaReload(section);
-        buttonParent.style.display = "block";
+        
+        areaReload(userAreaParent);
+        buttonParent.style.display = "flex";
         habitParent.style.display = "block";
 
     })
     userArea.append(userName, userEmail, changePassword, logoutButton, backButton);
-    userAreaParent =document.querySelector("#user");
     userAreaParent.appendChild(userArea);
 
 }
@@ -177,16 +242,20 @@ function loadUserArea(){
 function getToken(){
     token = localStorage.getItem("token");
     if(!token){
-        signInButton = document.createElement("button");
+        let signInButton = document.createElement("button");
         signInButton.setAttribute("id", "signInButton");
-        signInButton.innerText = "Sign In";
-        registerButton = document.createElement("button");
+        signInButton.textContent = "Sign In";
+        let registerButton = document.createElement("button");
         registerButton.setAttribute("id", "registerButton");
-        registerButton.innerText = "Register";
-        backButton = document.createElement("button");
+        registerButton.textContent = "Register";
+        let backButton = document.createElement("button");
         backButton.setAttribute("id", "backButton");
-        backButton.innerText = "Back";
+        backButton.textContent = "Back";
         backButton.style.display = "none";
+        backButton.style.order=2;
+        let title = document.createElement('h1')
+        title.textContent = "Welcome to HabTrac";
+        
         signInButton.addEventListener("click", (e) => {
             e.preventDefault()
             signInButton.style.display = "none";
@@ -201,19 +270,22 @@ function getToken(){
             registerForm(e)});
         backButton.addEventListener("click", (e) =>{
             e.preventDefault()
-            window.location.reload();
+            let auth = document.querySelector("#auth");
+            areaReload(auth);
+            getToken();
         })
 
         buttonParent = document.querySelector("#auth");
+        buttonParent.appendChild(title);
         buttonParent.appendChild(signInButton);
         buttonParent.appendChild(registerButton);
         buttonParent.appendChild(backButton);
 
     } else {
-        document.querySelector("#welcome").style.display = "none";
+        document.querySelector("#auth").style.display = "none";
         let userButton = document.createElement("button");
-        userButton.innerText = localStorage.getItem("username");
-        let buttonParent = document.querySelector("#auth")
+        userButton.textContent = localStorage.getItem("username");
+        let buttonParent = document.querySelector("#habits")
         buttonParent.appendChild(userButton);
         userButton.addEventListener('click', (e) =>{
             e.preventDefault()
