@@ -85,7 +85,7 @@ input[type="submit"]{
 
 
 .circular-progress-1 {
-    display: flex;
+    /* display: flex; */
     width: 150px;
     height: 150px;
     border:20px solid transparent;
@@ -95,9 +95,11 @@ input[type="submit"]{
     font-size: 1.5em;
      background:
         linear-gradient( #519E8A, #519E8A) content-box no-repeat,
-        conic-gradient(rgb(7, 83, 170) var(--percentage,0), transparent var(--percentage,0)) border-box; 
+        conic-gradient(rgb(32, 120, 219) var(--percentage,0), transparent var(--percentage,0)) border-box; 
     --percentage: 0deg;
     margin: 5px;
+    display: grid;
+    /* place-items: center; */
 }
 
 p {
@@ -107,4 +109,43 @@ p {
     font-family: 'Signika Negative', sans-serif;
     margin-top: 15px;
    
+}
+
+/* #habits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    padding: var(--sm) var(--med);
+    max-width: 400px;
+    grid-gap: 1rem;
+    background-color: red;
+}
+   */
+
+/* selects all habits */
+.container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    /* grid-template-columns: 1fr 1fr; */
+    padding: var(--sm) var(--med);
+    max-width: 400px;
+    grid-gap: 1rem;
+    background-color: red;
+    overflow: hidden;
+   
+    
+}
+  
+/* 
+add new habit */
+.modal-btns {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: .5rem;
+  }
+
+#newHabitButton {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
 }
