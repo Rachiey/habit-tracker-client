@@ -97,3 +97,8 @@ input[type="submit"]{
         conic-gradient(rgb(7, 83, 170) var(--percentage,0), transparent var(--percentage,0)) border-box; 
     --percentage: 0deg;
 }
+
+#habitGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}

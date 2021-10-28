@@ -53,7 +53,6 @@ function newHabitForm(){
         { tag: 'input', attributes: { type: 'text', name: 'habitName', id: "habitName", placeholder: 'Habit Name' } },
         { tag: 'input', attributes: { type: 'text', name: 'quantity', id:"quantity", placeholder: 'Quantity'}},
         { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units'}},
-        { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units'}},
         { tag: 'input', attributes: { type: 'submit', id:"create", value: 'Create Habit' } }
         
     ]
@@ -66,7 +65,6 @@ function newHabitForm(){
             form.appendChild(field)
         })
     })
-    createButton = document.querySelector("#create")
 
     newHabitFormParent=document.querySelector("#newHabitFormParent")
     let backButton = document.createElement("button");
@@ -78,6 +76,7 @@ function newHabitForm(){
         areaReload(newHabitFormParent);
         let habitParent = document.querySelector("#habits")
         habitParent.style.display = "block";
+        
     })
     
     newHabitFormParent.append(backButton, form)
@@ -96,6 +95,11 @@ async function getHabits(){
     if (habits.err) {
         logout()
     }
+    console.log(habits);
+    let habitGrid = document.createElement("div")
+    let habitGridParent = document.querySelector("#habits")
+    habitGrid.setAttribute("id", "habitGrid");
+    habitGridParent.append(habitGrid);
     await habits.map(r => renderHabit(r))
     if (habits.length < 6){
         let newHabitButton = document.createElement('button')
@@ -113,7 +117,7 @@ async function getHabits(){
 }
 
 function renderHabit(data){
-    let habitHolder = document.querySelector("#habits");
+    let habitHolder = document.querySelector("#habitGrid");
     let habitParent = document.createElement("div");
     let habitName = document.createElement("p");
     habitParent.setAttribute("class","container");
@@ -128,24 +132,62 @@ function renderHabit(data){
     const created_date = new Date();
     const date = `${created_date.getDate()}/${created_date.getMonth()}/${created_date.getFullYear()}`
     let completedAmount = data.history[date]
+    if (!completedAmount){
+        completedAmount = 0;
+    }
     let circlePercentage = completedAmount *(360/data.quantity)
     circularProgress.style.setProperty('--percentage', `${completedAmount *(360/data.quantity)}deg`)
-    
-    habitName.innerText = data.habitName;
+    let streakNumber = calcStreaks(data)
+
+    let streak = document.createElement('p')
+    streak.setAttribute("class","streak")
+    streak.textContent = streakNumber;
+    habitName.setAttribute("id", data.habitName)
+    habitName.setAttribute("class","habitName")
+    habitName.textContent = data.habitName;
     let habitQuantity = document.createElement("p");
     habitQuantity.innerText= data.quantity;
-    circularProgress.addEventListener("click", (e) => {
-        console.log(circularProgress.id);
-        let habitid = circularProgress.id;
+
+    //Add buttons:
+    let plusButton = document.createElement("button");
+    plusButton.setAttribute("class", "plusButton")
+    plusButton.setAttribute("id",habitId)
+    plusButton.textContent = "+";
+    plusButton.addEventListener("click", (e) => {
+        console.log(plusButton.id);
+        let habitid = plusButton.id;
         e.preventDefault()
         if (circlePercentage < 360){
             incrementHabit(habitid)
         } else {
             habitName.innerText = "Habit completed for today"
-            setTimeout(2000, () => { habitName.innerText=data.habitName})
+            setTimeout(()=>{habitName.innerText=habitName.id}, 2000)
         }
     })
-    circularProgress.append(habitName);
+
+    let minusButton = document.createElement("button");
+    minusButton.setAttribute("class", "minusButton")
+    minusButton.setAttribute("id",habitId)
+    minusButton.textContent = "-";
+    minusButton.addEventListener("click", (e)=>{
+        let habitid= minusButton.id;
+        e.preventDefault()
+        if(circlePercentage >0){
+            decrementHabit(habitid)
+        }
+    })
+
+    let deleteButton = document.createElement("button");
+    deleteButton.setAttribute("class", "deleteButton");
+    deleteButton.setAttribute("id",habitId)
+    deleteButton.textContent = "🗑️";
+    deleteButton.addEventListener("click", (e)=>{
+        let habitid = deleteButton.id;
+
+        e.preventDefault();
+        deleteHabit(habitid);
+    })
+    circularProgress.append(habitName, streak,plusButton, deleteButton, minusButton);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
@@ -153,6 +195,8 @@ function renderHabit(data){
 
     
 }
+
+
 
 async function addNewHabit(e){
     e.preventDefault()
@@ -163,19 +207,21 @@ async function addNewHabit(e){
         e.target.userID.value = userID;
         const options = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
             body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
         }
         const r = await fetch(`http://localhost:3000/habits/`, options)
+        
         let section = document.querySelector("#habits")
         areaReload(section);
         let form = document.querySelector("#newHabitFormParent")
         areaReload(form);
+        form.style.display= "none"
 
         section.style.display = "block";
         getToken();
     }catch(err){
-
+        console.log(err);
     }
 }
 
@@ -184,16 +230,44 @@ async function incrementHabit(habitID){
         method: 'PATCH',
         Authorization: localStorage.getItem('token')
     }
-    response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
+    let response = await fetch(`http://localhost:3000/habits/habit/${habitID}/up`,options)
+    let habits = await response.json()
+    if (habits.err) {
+        console.warn(err);
+    }
+    habitHolder = document.querySelector("#habits")
+    areaReload(habitHolder);
+    getToken();
+}
+async function decrementHabit(habitID){
+    const options = {
+        method: 'PATCH',
+        Authorization: localStorage.getItem('token')
+    }
+    response = await fetch(`http://localhost:3000/habits/habit/${habitID}/down`,options)
     habits = await response.json()
     if (habits.err) {
-       
+       console.warn(err);
     }
     habitHolder = document.querySelector("#habits")
     areaReload(habitHolder);
     getToken();
 }
 
+async function deleteHabit(habitID){
+    const options = {
+        method: 'DELETE',
+        Authorization: localStorage.getItem('token')
+    }
+    let response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
+    let r = response.json()
+    if(r.err){
+        console.warn(err);
+    }
+    habitHolder = document.querySelector("#habits")
+    areaReload(habitHolder);
+    getToken();
+}
 function loadUserArea(){
     buttonParent = document.querySelector("#auth");
     buttonParent.style.display = "none";
@@ -229,7 +303,6 @@ function loadUserArea(){
         e.preventDefault()
         
         areaReload(userAreaParent);
-        buttonParent.style.display = "flex";
         habitParent.style.display = "block";
 
     })
@@ -403,6 +476,28 @@ async function changePass(){
             }
         }
     })
+}
+
+
+function calcStreaks(data) {
+    let flag = 1
+    let quantity = data.quantity; //need to access this from the habit object
+    let today = new Date()
+    let days = 86400000 //number of milliseconds in a day
+    let counter = 0;
+    let habit = data.history;
+    while(flag === 1){
+    let previousDay = new Date(today - (1*days))
+    let previousDate = `${previousDay.getDate()}/${previousDay.getMonth()}/${previousDay.getFullYear()}`
+    if(habit[previousDate] >= quantity){
+        counter ++
+        today = previousDay
+    } else{
+        flag = 0;
+        console.log(counter)
+        return counter
+    }
+    }
 }
 
 
