@@ -122,7 +122,7 @@ function renderHabit(data){
     let habitBootstrap = document.createElement("div")
     habitBootstrap.setAttribute("class","col-md-3 col-sm-6");
     let circularProgress = document.createElement('div');
-    circularProgress.setAttribute("class","circular-progress-1");
+    circularProgress.setAttribute("class","circular-progress-1 p-0");
     habitId = data._id;  
     circularProgress.setAttribute("id",habitId);
     const created_date = new Date();
@@ -182,7 +182,6 @@ async function addNewHabit(e){
 async function incrementHabit(habitID){
     const options = {
         method: 'PATCH',
-        Authorization: localStorage.getItem('token')
     }
     response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
     habits = await response.json()

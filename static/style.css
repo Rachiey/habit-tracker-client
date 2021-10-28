@@ -86,9 +86,9 @@ input[type="submit"]{
 
 .circular-progress-1 {
     /* display: flex; */
-    width: 150px;
-    height: 150px;
-    border:20px solid transparent;
+    width: 120px;
+    height: 120px;
+    border:15px solid transparent;
     border-radius: 50%;
     align-items: center;
     justify-content: center;
@@ -111,38 +111,17 @@ p {
    
 }
 
-/* #habits {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    padding: var(--sm) var(--med);
-    max-width: 400px;
-    grid-gap: 1rem;
-    background-color: red;
-}
-   */
 
 /* selects all habits */
 .container {
-    width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    /* grid-template-columns: 1fr 1fr; */
     padding: var(--sm) var(--med);
     max-width: 400px;
     grid-gap: 1rem;
-    background-color: red;
-    overflow: hidden;
-   
-    
+    border: 1px solid red;
 }
-  
-/* 
-add new habit */
-.modal-btns {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: .5rem;
-  }
+
 
 #newHabitButton {
     display: block;
