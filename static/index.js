@@ -182,6 +182,7 @@ async function addNewHabit(e){
 async function incrementHabit(habitID){
     const options = {
         method: 'PATCH',
+        Authorization: localStorage.getItem('token')
     }
     response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
     habits = await response.json()
