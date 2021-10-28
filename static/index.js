@@ -75,7 +75,7 @@ function newHabitForm(){
         e.preventDefault()
         areaReload(newHabitFormParent);
         let habitParent = document.querySelector("#habits")
-        habitParent.style.display = "block";
+        habitParent.style.display = "flex";
         
     })
     
@@ -90,7 +90,7 @@ async function getHabits(){
     const options = {
         headers: new Headers({'Authorization': localStorage.getItem('token')}),
     }
-    response = await fetch(`http://localhost:3000/habits/user/${userId}`,options)
+    response = await fetch(`https://hab-trac.herokuapp.com/habits/user/${userId}`,options)
     habits = await response.json()
     if (habits.err) {
         logout()
@@ -108,10 +108,12 @@ async function getHabits(){
         let habitParent = document.querySelector("#habits")
         newHabitButton.addEventListener("click", (e) => {
             e.preventDefault()
+            let userarea = document.querySelector("#user")
+            userarea.style.display = "none";
             habitParent.style.display = "none";
             newHabitForm()
         })
-        habitParent.append(newHabitButton)
+        habitGrid.append(newHabitButton)
     }
     console.log(habits);
 }
@@ -138,10 +140,12 @@ function renderHabit(data){
     let circlePercentage = completedAmount *(360/data.quantity)
     circularProgress.style.setProperty('--percentage', `${completedAmount *(360/data.quantity)}deg`)
     let streakNumber = calcStreaks(data)
-
     let streak = document.createElement('p')
     streak.setAttribute("class","streak")
-    streak.textContent = streakNumber;
+    streak.textContent = `Streak: ${streakNumber}`;
+    if(!streakNumber){
+        streak.style.display = "none";
+    }
     habitName.setAttribute("id", data.habitName)
     habitName.setAttribute("class","habitName")
     habitName.textContent = data.habitName;
@@ -187,7 +191,7 @@ function renderHabit(data){
         e.preventDefault();
         deleteHabit(habitid);
     })
-    circularProgress.append(habitName, streak,plusButton, deleteButton, minusButton);
+    circularProgress.append(habitName, streak,minusButton, deleteButton, plusButton);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
@@ -210,7 +214,7 @@ async function addNewHabit(e){
             headers: { 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
             body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
         }
-        const r = await fetch(`http://localhost:3000/habits/`, options)
+        const r = await fetch(`https://hab-trac.herokuapp.com/habits/`, options)
         
         let section = document.querySelector("#habits")
         areaReload(section);
@@ -218,7 +222,7 @@ async function addNewHabit(e){
         areaReload(form);
         form.style.display= "none"
 
-        section.style.display = "block";
+        section.style.display = "flex";
         getToken();
     }catch(err){
         console.log(err);
@@ -230,7 +234,7 @@ async function incrementHabit(habitID){
         method: 'PATCH',
         Authorization: localStorage.getItem('token')
     }
-    let response = await fetch(`http://localhost:3000/habits/habit/${habitID}/up`,options)
+    let response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}/up`,options)
     let habits = await response.json()
     if (habits.err) {
         console.warn(err);
@@ -244,7 +248,7 @@ async function decrementHabit(habitID){
         method: 'PATCH',
         Authorization: localStorage.getItem('token')
     }
-    response = await fetch(`http://localhost:3000/habits/habit/${habitID}/down`,options)
+    response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}/down`,options)
     habits = await response.json()
     if (habits.err) {
        console.warn(err);
@@ -259,7 +263,7 @@ async function deleteHabit(habitID){
         method: 'DELETE',
         Authorization: localStorage.getItem('token')
     }
-    let response = await fetch(`http://localhost:3000/habits/habit/${habitID}`,options)
+    let response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}`,options)
     let r = response.json()
     if(r.err){
         console.warn(err);
@@ -303,7 +307,7 @@ function loadUserArea(){
         e.preventDefault()
         
         areaReload(userAreaParent);
-        habitParent.style.display = "block";
+        habitParent.style.display = "flex";
 
     })
     userArea.append(userName, userEmail, changePassword, logoutButton, backButton);
@@ -404,12 +408,15 @@ function getToken(){
 
     } else {
         document.querySelector("#auth").style.display = "none";
+        document.querySelector("#user").style.display = "none";
         let userButton = document.createElement("button");
         userButton.textContent = localStorage.getItem("username");
+        userButton.setAttribute("class", "userButton")
         let buttonParent = document.querySelector("#habits")
         buttonParent.appendChild(userButton);
         userButton.addEventListener('click', (e) =>{
             e.preventDefault()
+            document.querySelector("#user").style.display = "block";
             loadUserArea()});
         getHabits();
     }
@@ -438,9 +445,9 @@ async function changePass(){
     })
     section.append(backButton);
     const fields = [
-        { tag: 'input', attributes: { type: 'password', name: 'currentPassword', id:"currentPassword", placeholder: 'Password' } },
-        { tag: 'input', attributes: { type: 'password', name: 'newPassword', id:"newPassword", placeholder: 'Password' } },
-        { tag: 'input', attributes: { type: 'password', name: 'verifyNewPassword', id:"verifyNewPassword", placeholder: 'Password' } },
+        { tag: 'input', attributes: { type: 'password', name: 'currentPassword', id:"currentPassword", placeholder: 'Current Password' } },
+        { tag: 'input', attributes: { type: 'password', name: 'newPassword', id:"newPassword", placeholder: 'New Password' } },
+        { tag: 'input', attributes: { type: 'password', name: 'verifyNewPassword', id:"verifyNewPassword", placeholder: 'Confirm New Password' } },
         { tag: 'input', attributes: { type: 'hidden', name: 'userid', id:"userid" } },
         { tag: 'input', attributes: { type: 'submit', value: 'Change Password' } }
     ]
@@ -467,7 +474,7 @@ async function changePass(){
                     headers: { 'Content-Type': 'application/json','Authorization': localStorage.getItem('token')},
                     body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
                 }
-                const response = await fetch(`http://localhost:3000/users/changePassword`, options)
+                const response = await fetch(`https://hab-trac.herokuapp.com/users/changePassword`, options)
                 const data = await response.json()
                 if (!data.success) { throw new Error('Could not change Password'); }
                 window.location.reload();
