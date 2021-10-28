@@ -139,6 +139,10 @@ p {
     width: 100%;
 }
 
+#userArea {
+    text-align: center;
+}
+
 #newHabitForm {
     text-align: center;
 
