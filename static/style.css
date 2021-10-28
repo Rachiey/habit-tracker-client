@@ -3,6 +3,11 @@
 
 body {
     background-color: #519E8A;
+    margin:10px;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    
 
 }
 
@@ -14,7 +19,7 @@ body {
     text-align: center;
     width: 100vw;
     height: 100vh;
-    margin: 0px;
+    margin: 0;
 }
 
 h1 {
@@ -86,8 +91,8 @@ input[type="submit"]{
 
 .circular-progress-1 {
     /* display: flex; */
-    width: 120px;
-    height: 120px;
+    width: 115px;
+    height: 115px;
     border:15px solid transparent;
     border-radius: 50%;
     align-items: center;
@@ -97,14 +102,14 @@ input[type="submit"]{
         linear-gradient( #519E8A, #519E8A) content-box no-repeat,
         conic-gradient(rgb(32, 120, 219) var(--percentage,0), transparent var(--percentage,0)) border-box; 
     --percentage: 0deg;
-    margin: 5px;
+    margin: 20px;
     display: grid;
     /* place-items: center; */
 }
 
 p {
     color: black;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     font-family: 'Signika Negative', sans-serif;
     margin-top: 15px;
@@ -119,7 +124,7 @@ p {
     padding: var(--sm) var(--med);
     max-width: 400px;
     grid-gap: 1rem;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 
@@ -128,3 +133,24 @@ p {
     margin: auto;
     margin-top: 10px;
 }
+
+#habits {
+    height: 100%;
+    width: 100%;
+}
+
+#newHabitForm {
+    text-align: center;
+
+}
+
+input[type=text], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center
+  }
