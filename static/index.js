@@ -89,7 +89,7 @@ async function getHabits(){
     const options = {
         headers: new Headers({'Authorization': localStorage.getItem('token')}),
     }
-    response = await fetch(`hab-trac.herokuapp.com/habits/user/${userId}`,options)
+    response = await fetch(`https://hab-trac.herokuapp.com/habits/user/${userId}`,options)
     habits = await response.json()
     if (habits.err) {
         logout()
@@ -216,7 +216,7 @@ async function addNewHabit(e){
             headers: { 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
             body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
         }
-        const r = await fetch(`hab-trac.herokuapp.com/habits/`, options)
+        const r = await fetch(`https://hab-trac.herokuapp.com/habits/`, options)
         
         let section = document.querySelector("#habits")
         areaReload(section);
@@ -236,7 +236,7 @@ async function incrementHabit(habitID){
         method: 'PATCH',
         headers: {"Authorization": localStorage.getItem('token')}
     }
-    let response = await fetch(`hab-trac.herokuapp.com/habits/habit/${habitID}/up`,options)
+    let response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}/up`,options)
     let habits = await response.json()
     if (habits.err) {
         console.warn(err);
@@ -250,7 +250,7 @@ async function decrementHabit(habitID){
         method: 'PATCH',
         headers: {"Authorization": localStorage.getItem('token')}
     }
-    response = await fetch(`hab-trac.herokuapp.com/habits/habit/${habitID}/down`,options)
+    response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}/down`,options)
     habits = await response.json()
     if (habits.err) {
        console.warn(err);
@@ -265,7 +265,7 @@ async function deleteHabit(habitID){
         method: 'DELETE',
         headers: {"Authorization": localStorage.getItem('token')}
     }
-    let response = await fetch(`hab-trac.herokuapp.com/habits/habit/${habitID}`,options)
+    let response = await fetch(`https://hab-trac.herokuapp.com/habits/habit/${habitID}`,options)
     let r = response.json()
     if(r.err){
         console.warn(err);
@@ -429,7 +429,7 @@ async function changePass(){
                     headers: { 'Content-Type': 'application/json','Authorization': localStorage.getItem('token')},
                     body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
                 }
-                const response = await fetch(`hab-trac.herokuapp.com/users/changePassword`, options)
+                const response = await fetch(`https://hab-trac.herokuapp.com/users/changePassword`, options)
                 const data = await response.json()
                 if (!data.success) { throw new Error('Could not change Password'); }
                 window.location.reload();
