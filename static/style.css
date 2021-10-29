@@ -42,7 +42,6 @@ button, input[type="submit"] {
     border-radius:0.12em;
     box-sizing: border-box;
     text-decoration:none;
-    font-family:'Roboto',sans-serif;
     font-weight:300;
     color: #FFFFFF;
     text-align:center;
@@ -88,6 +87,7 @@ input[type="submit"]{
     margin-top: 10px;
   
 
+
 }
 
 
@@ -105,7 +105,7 @@ input[type="submit"]{
     margin: 0px;
     padding: 0px;
     text-align: center;
-    grid-template-rows: 2fr 2fr 3fr;
+    grid-template-rows: 2fr 2fr 1fr 2fr;
     grid-template-columns: 1fr 1fr 1fr;
     font-size: 1.5em;
      background:
@@ -151,8 +151,15 @@ input[type="submit"]{
 }
 
 .streak{
-    grid-row-start: 3;
+    grid-row-start: 4;
     grid-column-start: 2;
+}
+
+.completedText{
+    grid-row-start: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    text-align: center;
 }
 
 .habitName{
@@ -177,12 +184,22 @@ input[type="submit"]{
     padding:0px;
     justify-self: center;
     margin:0px;
+    transform: translateX(-2.5%) ;
+    background-color: #4D9481;
+    border: none;
+    font-size: 1.5em;
+}
+
+
+#newHabitButton:hover {
+    border: 2px solid white;
+    color: white;
 }
 
 .userButton{
     align-self: center;
     justify-self: center;
-    width: 5vw;
+    min-width: 5vw ;
 }
 
 #habits{
@@ -234,5 +251,42 @@ input[type=text], select {
     justify-content: center;
     align-content: center;
 }
+
+
+input[type=email], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+} 
+
+input[type=password], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+}
+
+#quantity {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+}
+
 
 

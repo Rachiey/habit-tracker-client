@@ -49,12 +49,11 @@ function newHabitForm(){
     
 
     const fields = [
-        { tag: 'input', attributes: { type: 'hidden', name: 'userID', id: 'userID', placeholder: 'Habit Name' } },
-        { tag: 'input', attributes: { type: 'text', name: 'habitName', id: "habitName", placeholder: 'Habit Name' } },
-        { tag: 'input', attributes: { type: 'text', name: 'quantity', id:"quantity", placeholder: 'Quantity'}},
-        { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units'}},
+        { tag: 'input', attributes: { type: 'hidden', name: 'userID', id: 'userID', placeholder: 'Habit Name', maxlength: '50', minlength: '5'} },
+        { tag: 'input', attributes: { type: 'text', name: 'habitName', id: "habitName", placeholder: 'Habit Name', maxlength: '50', minlength: '5' } },
+        { tag: 'input', attributes: { type: 'number', name: 'quantity', id:"quantity", placeholder: 'Quantity', max: '100', min: '1'}},
+        { tag: 'input', attributes: { type: 'text', name: 'units', id:"units", placeholder: 'Units', maxlength: '50', minlength: '1'}},
         { tag: 'input', attributes: { type: 'submit', id:"create", value: 'Create Habit' } }
-        
     ]
     const form = document.createElement('form');
     form.setAttribute("id", "newHabitForm")
@@ -152,6 +151,9 @@ function renderHabit(data){
     let habitQuantity = document.createElement("p");
     habitQuantity.innerText= data.quantity;
 
+    let completedText = document.createElement("p");
+    completedText.textContent = `${completedAmount} ${data.units}`
+    completedText.setAttribute("class","completedText")
     //Add buttons:
     let plusButton = document.createElement("button");
     plusButton.setAttribute("class", "plusButton")
@@ -191,7 +193,7 @@ function renderHabit(data){
         e.preventDefault();
         deleteHabit(habitid);
     })
-    circularProgress.append(habitName, streak,minusButton, deleteButton, plusButton);
+    circularProgress.append(habitName, completedText, streak,minusButton, deleteButton, plusButton);
     habitBootstrap.append(circularProgress);
     habitRow.append(habitBootstrap);
     habitParent.append(habitRow);
