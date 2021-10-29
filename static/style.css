@@ -1,13 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Signika+Negative:wght@400&display=swap');
+
+* {
+    color: white;
+    font-family: 'Signika Negative', sans-serif;
+  } 
 
 body {
     background-color: #519E8A;
+
+}
+
+input{
+    color: black;
+}
+#auth{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     text-align: center;
     width: 100vw;
     height: 100vh;
+    margin: 0px;
 }
 
 h1 {
@@ -27,14 +42,13 @@ button, input[type="submit"] {
     border-radius:0.12em;
     box-sizing: border-box;
     text-decoration:none;
-    font-family:'Roboto',sans-serif;
     font-weight:300;
     color: #FFFFFF;
     text-align:center;
     transition: all 0.2s;
 }
 
-input[type="submit"]:hover{
+input[type="submit"]:hover, .backButton:hover{
     color:#000000;
     background-color:#FFFFFF;
 }
@@ -42,6 +56,7 @@ input[type="submit"]:hover{
 button:hover{
     color:#000000;
     background-color:#FFFFFF;
+    
 }
 
 @media all and (max-width:30em){
@@ -53,6 +68,12 @@ button:hover{
 
 button {
     margin-top: 10px;
+    font-family: 'Signika Negative', sans-serif;
+}
+
+#auth>button{
+    max-width: 100px;
+    justify-self: center;
 }
 
 #BackButton {
@@ -66,4 +87,206 @@ input[type="submit"]{
     margin-top: 10px;
   
 
-  }
+
+}
+
+
+
+.circular-progress-1 {
+    display: grid;
+    width: 20vw;
+    height: 20vw;
+    border:20px solid transparent;
+    border-radius: 50%;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    grid-template-rows: 2fr 2fr 1fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 1.5em;
+     background:
+        linear-gradient(#4d9481,#4d9481) content-box no-repeat,
+        conic-gradient(#ffa500 var(--percentage,0), transparent var(--percentage,0)) border-box; 
+    --percentage: 0deg;
+}
+
+#habitGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+}
+
+
+.row{
+    align-self: center;
+    justify-self: center;
+    justify-content: space-around;
+    display:grid;
+    width: 100%;
+}
+
+.col-md-3{
+    width:100%;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    justify-self: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+.container{
+    padding: 0px !important;
+}
+
+.plusButton, .deleteButton, .minusButton{
+    grid-row-start: 2;
+    align-self: center;
+    margin: 0 !important;
+    text-align: left !important;
+
+}
+
+.streak{
+    grid-row-start: 4;
+    grid-column-start: 2;
+}
+
+.completedText{
+    grid-row-start: 3;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    text-align: center;
+}
+
+.habitName{
+    grid-column-start: 2;
+}
+#user{
+    width:100vw;
+    height:100vh;
+}
+
+#userArea{
+    text-align: center;
+    justify-content: center;
+    margin-top:40vh;
+    font-size: x-large;
+}
+
+#newHabitButton{
+    border-radius: 50%;
+    width: 20vw;
+    height: 20vw;
+    padding:0px;
+    justify-self: center;
+    margin:0px;
+    transform: translateX(-2.5%) ;
+    background-color: #4D9481;
+    border: none;
+    font-size: 1.5em;
+}
+
+
+#newHabitButton:hover {
+    border: 2px solid white;
+    color: white;
+}
+
+.userButton{
+    align-self: center;
+    justify-self: center;
+    min-width: 5vw ;
+}
+
+#habits{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80vw;
+    margin-left: 10vw;
+    box-sizing: border-box;
+}
+
+input[type=text], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+   }
+
+   
+
+#newHabitFormParent{
+    display: flex;
+    flex-direction:column;
+    width: 60vw;
+    margin-left: 20vw;
+    margin-top: 40vh;
+}
+
+#newHabitFormParent>.backButton{
+    align-self: center;
+    max-width:10vw;
+}
+
+#newHabitForm>input{
+    display:block;
+    align-self: center;
+}
+
+
+
+#newHabitForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+
+input[type=email], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+} 
+
+input[type=password], select {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+}
+
+#quantity {
+    width: 35%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    color: black;
+}
+
+
+
